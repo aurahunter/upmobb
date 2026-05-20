@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contratos</title>
+  <link rel="stylesheet" href="../../style/contracts.css">
+</head>
+<body>
+  <div class="pagina">
+    <header class="cabecalho">
+      <h1>Contratos</h1>
+      <button type="button" class="btn btn--primario" id="btn-novo-contrato">
+        Novo contrato
+      </button>
+    </header>
+
+    <section class="painel">
+      <div class="filtros">
+        <div class="campo campo--busca">
+          <label for="busca">Buscar</label>
+          <input
+            type="search"
+            id="busca"
+            placeholder="Contratante, documento ou modelo..."
+            autocomplete="off"
+          >
+        </div>
+        <div class="campo">
+          <label for="filtro-status">Status</label>
+          <select id="filtro-status">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn--secundario" id="btn-recarregar">
+          Atualizar
+        </button>
+      </div>
+
+      <div id="area-conteudo">
+        <div class="estado estado--carregando" id="estado-carregando">
+          <div class="spinner" aria-hidden="true"></div>
+          <p>Carregando contratos...</p>
+        </div>
+      </div>
+
+      <nav class="paginacao" id="paginacao" hidden>
+        <span id="paginacao-info"></span>
+        <div class="paginacao__botoes">
+          <button type="button" class="btn btn--secundario" id="btn-pagina-anterior" disabled>
+            Anterior
+          </button>
+          <button type="button" class="btn btn--secundario" id="btn-pagina-proxima" disabled>
+            Próxima
+          </button>
+        </div>
+      </nav>
+    </section>
+  </div>
+
+  <div class="modal-overlay" id="modal-detalhes" hidden>
+    <div class="modal" role="dialog" aria-labelledby="titulo-detalhes">
+      <div class="modal__cabecalho">
+        <h2 id="titulo-detalhes">Detalhes do contrato</h2>
+        <button type="button" class="btn btn--link" data-fechar-modal="detalhes">Fechar</button>
+      </div>
+      <div class="modal__corpo detalhes" id="corpo-detalhes"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-previa" hidden>
+    <div class="modal modal--grande" role="dialog" aria-labelledby="titulo-previa">
+      <div class="modal__cabecalho">
+        <h2 id="titulo-previa">Prévia do contrato</h2>
+        <button type="button" class="btn btn--link" data-fechar-modal="previa">Fechar</button>
+      </div>
+      <div class="modal__corpo previa" id="corpo-previa"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-criar" hidden>
+    <div class="modal modal--grande" role="dialog" aria-labelledby="titulo-criar">
+      <div class="salvando-overlay" id="overlay-salvando" hidden>
+        <p>Salvando contrato...</p>
+      </div>
+      <div class="modal__cabecalho">
+        <h2 id="titulo-criar">Novo contrato</h2>
+        <button type="button" class="btn btn--link" data-fechar-modal="criar">Fechar</button>
+      </div>
+      <form class="modal__corpo formulario" id="form-criar" novalidate>
+        <div class="campo">
+          <label for="campo-modelo">Modelo *</label>
+          <select id="campo-modelo" name="modelo" required></select>
+          <span class="mensagem-erro" data-erro="modelo" hidden></span>
+        </div>
+        <div class="formulario__linha">
+          <div class="campo">
+            <label for="campo-nome">Nome do contratante *</label>
+            <input type="text" id="campo-nome" name="contratanteNome" required>
+            <span class="mensagem-erro" data-erro="contratanteNome" hidden></span>
+          </div>
+          <div class="campo">
+            <label for="campo-tipo-doc">Tipo de documento *</label>
+            <select id="campo-tipo-doc" name="tipoDocumento" required>
+              <option value="">Selecione</option>
+              <option value="CPF">CPF</option>
+              <option value="CNPJ">CNPJ</option>
+            </select>
+            <span class="mensagem-erro" data-erro="tipoDocumento" hidden></span>
+          </div>
+        </div>
+        <div class="formulario__linha">
+          <div class="campo">
+            <label for="campo-documento">Documento *</label>
+            <input type="text" id="campo-documento" name="documento" required>
+            <span class="mensagem-erro" data-erro="documento" hidden></span>
+          </div>
+          <div class="campo">
+            <label for="campo-email">E-mail *</label>
+            <input type="email" id="campo-email" name="email" required>
+            <span class="mensagem-erro" data-erro="email" hidden></span>
+          </div>
+        </div>
+        <div class="formulario__linha">
+          <div class="campo">
+            <label for="campo-cep">CEP *</label>
+            <input type="text" id="campo-cep" name="cep" required placeholder="00000-000">
+            <span class="mensagem-erro" data-erro="cep" hidden></span>
+          </div>
+          <div class="campo">
+            <label for="campo-endereco">Endereço *</label>
+            <input type="text" id="campo-endereco" name="endereco" required>
+            <span class="mensagem-erro" data-erro="endereco" hidden></span>
+          </div>
+        </div>
+        <div class="formulario__linha">
+          <div class="campo">
+            <label for="campo-numero">Número *</label>
+            <input type="text" id="campo-numero" name="numero" required>
+            <span class="mensagem-erro" data-erro="numero" hidden></span>
+          </div>
+          <div class="campo">
+            <label for="campo-bairro">Bairro *</label>
+            <input type="text" id="campo-bairro" name="bairro" required>
+            <span class="mensagem-erro" data-erro="bairro" hidden></span>
+          </div>
+        </div>
+        <div class="formulario__linha">
+          <div class="campo">
+            <label for="campo-cidade">Cidade *</label>
+            <input type="text" id="campo-cidade" name="cidade" required>
+            <span class="mensagem-erro" data-erro="cidade" hidden></span>
+          </div>
+          <div class="campo">
+            <label for="campo-uf">UF *</label>
+            <input type="text" id="campo-uf" name="uf" maxlength="2" required placeholder="SP">
+            <span class="mensagem-erro" data-erro="uf" hidden></span>
+          </div>
+        </div>
+      </form>
+      <div class="modal__rodape">
+        <button type="button" class="btn btn--secundario" data-fechar-modal="criar">Cancelar</button>
+        <button type="submit" form="form-criar" class="btn btn--primario" id="btn-salvar">
+          Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../../scripts/contracts/list.js"></script>
+</body>
+</html>
